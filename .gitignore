@@ -1,0 +1,24 @@
+# Сборка
+build/
+*.o
+*.a
+moc_*
+ui_*
+qrc_*
+.qmake.stash
+Makefile
+*.pro.user
+
+# Бинарники
+server/qt_tcp_server
+client/qt_tcp_client
+client/*.app
+qt_tcp_server
+qt_tcp_client
+
+# macOS / IDE
+.DS_Store
+.AppleDouble
+.idea/
+*.swp
+*~

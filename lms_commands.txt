@@ -1,0 +1,65 @@
+========================================================
+  КОМАНДЫ ДЛЯ LMS — qt_tcp_server (Кемплинг Екатерина)
+========================================================
+
+--- ВОПРОС 1: СБОРКА ОБРАЗА И ЗАПУСК КОНТЕЙНЕРА ---
+
+# Сборка образа из Dockerfile (выполнять в корне проекта)
+docker build -t akcelerator/qt_tcp_server:latest .
+
+# На Mac с Apple Silicon, если нужна linux/amd64:
+docker build --platform linux/amd64 -t akcelerator/qt_tcp_server:latest .
+
+# Запуск контейнера: порт 5555, сервер стартует сам
+docker run --rm -it -p 5555:5555 akcelerator/qt_tcp_server:latest
+
+# Публикация на Docker Hub (публичный доступ)
+docker login
+docker push akcelerator/qt_tcp_server:latest
+
+--- ВОПРОС 2: ЛОКАЛЬНАЯ СБОРКА СЕРВЕРА И КЛИЕНТА ---
+
+cd server
+qmake qt_tcp_server.pro
+make
+./qt_tcp_server
+
+cd client
+qmake qt_tcp_client.pro
+make
+./qt_tcp_client
+
+# Тест без GUI (несколько терминалов):
+nc 127.0.0.1 5555
+/add молоко
+/add хлеб
+/remove молоко
+/finish
+
+--- ВОПРОС 3: GIT (все операции из консоли) ---
+
+# 1. Создать приватный репозиторий на GitHub через сайт или:
+#    gh repo create qt-tcp-server --private --source=. --remote=origin
+
+# 2. Добавить сотрудников:
+#    gh api -X PUT repos/<USER>/qt-tcp-server/collaborators/gsvmbox
+#    gh api -X PUT repos/<USER>/qt-tcp-server/collaborators/ea-bud
+
+# 3. Клонировать (если репозиторий создан пустым):
+# git clone https://github.com/<USER>/qt-tcp-server.git
+# cd qt-tcp-server
+
+git init
+git checkout -b main
+git add README.md Dockerfile .dockerignore .gitignore registry_url.txt \
+        lms_commands.txt server/ client/
+git commit -m "Add Qt TCP server, client and Docker environment"
+
+git checkout -b screens
+git add captures/
+git commit -m "Add screenshots of Docker build/run and program demo"
+
+git checkout main
+git remote add origin https://github.com/<USER>/qt-tcp-server.git
+git push -u origin main
+git push origin screens

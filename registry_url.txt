@@ -1,0 +1,3 @@
+https://hub.docker.com/r/akcelerator/qt_tcp_server
+
+DOCKERHUB_IMAGE=akcelerator/qt_tcp_server:latest
