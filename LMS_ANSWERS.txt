@@ -1,0 +1,86 @@
+========================================================
+ТЕКСТЫ ДЛЯ ВСТАВКИ В LMS
+Кемплинг Екатерина, группа 251-353
+========================================================
+
+########## ВОПРОС 1 (Docker) ##########
+
+Dockerfile создан на базе alpine:3.14.
+Метка: LABEL description="QT TCP Server Container"
+Установлены qt5-qtbase-dev, g++ и make.
+Исходники копируются в /home/server и собираются в qt_tcp_server.
+Контейнер открывает порт 5555 и автоматически запускает сервер.
+
+Образ опубликован публично:
+https://hub.docker.com/r/akcelerator/qt_tcp_server
+
+Ссылка также лежит в репозитории: registry_url.txt
+
+Команды сборки и запуска:
+
+docker build --platform linux/amd64 -t akcelerator/qt_tcp_server:latest .
+docker run --rm -it --platform linux/amd64 -p 5555:5555 akcelerator/qt_tcp_server:latest
+
+Публикация:
+
+docker login
+docker push akcelerator/qt_tcp_server:latest
+
+Запуск опубликованного образа:
+
+docker pull akcelerator/qt_tcp_server:latest
+docker run --rm -it -p 5555:5555 akcelerator/qt_tcp_server:latest
+
+
+########## ВОПРОС 2 (программа) ##########
+
+Реализован многопользовательский TCP-сервер на C++/Qt (QTcpServer + QTcpSocket)
+на основе EchoServer. Порт 5555, лимит 4 клиента.
+
+Поведение:
+- новому клиенту отправляется приветствие и список команд;
+- при каждом подключении всем рассылается текущее число клиентов;
+- 5-й клиент получает «Сервер занят. Подключитесь позже.» и сразу отключается;
+- /add <элемент> добавляет элемент в общий список;
+- /remove <элемент> удаляет элемент из общего списка;
+- /finish помечает, что клиент закончил редактирование;
+- когда все текущие клиенты отправили /finish, итоговый список рассылается всем.
+
+Исходники сервера: папка server/
+Исходники GUI-клиента: папка client/
+
+Локальная сборка:
+
+cd server && qmake qt_tcp_server.pro && make && ./qt_tcp_server
+cd client && qmake qt_tcp_client.pro && make && open qt_tcp_client.app
+
+Тест без GUI:
+
+nc 127.0.0.1 5555
+
+
+########## ВОПРОС 3 (Git) ##########
+
+Создан локальный репозиторий с ветками main и screens.
+
+main — README (ФИО, группа, текст варианта), Dockerfile, исходники,
+       registry_url.txt. Сборочные файлы в .gitignore.
+
+screens — папка captures/ со скриншотами.
+
+Сотрудники, которых нужно добавить в приватный GitHub-репозиторий:
+https://github.com/gsvmbox
+https://github.com/ea-bud
+
+Команды (подставьте USER и имя репозитория):
+
+# создать приватный репозиторий на GitHub, затем:
+
+git remote add origin https://github.com/<USER>/<REPO>.git
+git push -u origin main
+git push origin screens
+
+# добавить сотрудников (через GitHub → Settings → Collaborators
+# или gh):
+# gh api -X PUT repos/<USER>/<REPO>/collaborators/gsvmbox
+# gh api -X PUT repos/<USER>/<REPO>/collaborators/ea-bud
