@@ -1,0 +1,20 @@
+// открыть гуи терминал
+open -n /Users/root1/Desktop/kempling2/client/qt_tcp_client.app 
+
+// открыть приложение в обычном терминале
+nc 127.0.0.1 5555
+
+//команды добавления/удаления/финиша
+/add молоко
+/add хлеб
+/remove молоко
+/finish
+
+//команда запуска приложения в докере
+docker run --rm -it --platform linux/amd64 -p 5555:5555 akcelerator/qt_tcp_server:latest
+
+//список докер контейнеров
+docker ps
+
+//остановить все работающие сразу:
+docker stop $(docker ps -q)
